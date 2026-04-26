@@ -3,12 +3,32 @@ import os
 import sys
 from dotenv import load_dotenv, find_dotenv
 
-from core.constants import ColoredFormatter, ANSIColors
+from core.constants import ColoredFormatter, ANSIColors, ASCII_LOGO_ART
 
 load_dotenv(find_dotenv())
 
 DEBUG = os.getenv("DEBUG", False) in (True, "True")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+DATABASE_URL = "sqlite+aiosqlite:///kashtan.db"
+try:
+    with open("version") as f:
+        VERSION = f.read().strip()
+except:
+    VERSION = "Undefined"
+
+
+async def show_logo(asciiArt: bool = True):
+    """Показывает логотип KURINOKI при старте."""
+
+    if asciiArt:
+        print(f"{ASCII_LOGO_ART}")
+    print(
+        f"{ANSIColors.GREEN}> KurinokiChanBot v{VERSION} – Asynchronous Chat Manager for Telegram{ANSIColors.ENDC}"
+    )
+    print(
+        f"{ANSIColors.GREEN}> {ANSIColors.UNDERLINE}https://github.com/mohovikov/KurinokiChanBot{ANSIColors.ENDC}"
+    )
+    print(f"{ANSIColors.YELLOW}> Press CTRL+C to exit{ANSIColors.ENDC}\n")
 
 
 def setup_logging():
