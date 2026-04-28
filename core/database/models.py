@@ -29,14 +29,19 @@ class User(Base):
 
     # Связи
     memberships: Mapped[list["Membership"]] = relationship(
-        back_populates="user", foreign_keys="Membership.user_id"
+        back_populates="user",
+        foreign_keys="Membership.user_id",
+        primaryjoin="User.id == Membership.user_id",
     )
     marriages: Mapped[list["Membership"]] = relationship(
-        back_populates="married_to", foreign_keys="Membership.married_to_id"
+        back_populates="married_to",
+        foreign_keys="Membership.married_to_id",
+        primaryjoin="User.id == Membership.married_to_id",
     )
-    proposals: Mapped[list["Membership"]] = relationship(
+    proposals_to_me: Mapped[list["Membership"]] = relationship(
         back_populates="pending_proposal_to",
         foreign_keys="Membership.pending_proposal_to_id",
+        primaryjoin="User.id == Membership.pending_proposal_to_id",
     )
 
     def __repr__(self) -> str:
@@ -76,13 +81,19 @@ class Membership(Base):
 
     # Связи
     user: Mapped["User"] = relationship(
-        back_populates="memberships", foreign_keys=[user_id]
+        back_populates="memberships",
+        foreign_keys=[user_id],
+        primaryjoin="User.id == Membership.user_id",
     )
     married_to: Mapped["User | None"] = relationship(
-        back_populates="marriages", foreign_keys=[married_to_id]
+        back_populates="marriages",
+        foreign_keys=[married_to_id],
+        primaryjoin="User.id == Membership.married_to_id",
     )
     pending_proposal_to: Mapped["User | None"] = relationship(
-        back_populates="proposals", foreign_keys=[pending_proposal_to_id]
+        back_populates="proposals_to_me",
+        foreign_keys=[pending_proposal_to_id],
+        primaryjoin="User.id == Membership.pending_proposal_to_id",
     )
 
     def __repr__(self) -> str:

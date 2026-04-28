@@ -1,0 +1,2 @@
+class MarriageError(Exception):
+    pass

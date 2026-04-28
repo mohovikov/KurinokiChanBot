@@ -9,6 +9,7 @@ load_dotenv(find_dotenv())
 
 DEBUG = os.getenv("DEBUG", False) in (True, "True")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+CREATOR_TELEGRAM_ID = int(os.getenv("CREATOR_TELEGRAM_ID", "0"))
 DATABASE_URL = "sqlite+aiosqlite:///kashtan.db"
 try:
     with open("version") as f:
