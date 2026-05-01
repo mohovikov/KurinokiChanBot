@@ -69,7 +69,6 @@ async def marry_command(message: Message, query: str):
                 f"💍 <b>{initiator.first_name}</b> предложил(а) "
                 f"<b>{target_membership.user.first_name}</b> руку и сердце!\n\n"
                 f"⏳ Ждём ответа в ЛС...",
-                parse_mode="HTML",
             )
 
             # Сообщение в ЛС

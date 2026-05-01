@@ -12,6 +12,6 @@ def setup() -> Router:
     router.include_router(general_router)
     router.include_router(marry_router)
     router.include_router(games_router)
-    router.include_router(reactions_router)
     router.include_router(voices_router)
+    router.include_router(reactions_router)
     return router

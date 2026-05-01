@@ -4,13 +4,12 @@ from aiogram.types import Message, ChatMemberUpdated
 from aiogram.enums import ChatType
 from aiogram.filters import (
     CommandStart,
-    Command,
     ChatMemberUpdatedFilter,
     IS_NOT_MEMBER,
     IS_MEMBER,
 )
 
-from core.messages.general import DM_RESPONSE, HELP_TEXT, WELCOME_TEXT
+from core.messages.general import DM_RESPONSE, WELCOME_TEXT
 from core.keyboards import inline
 from core.filters import ChatTypeFilter
 from core.services import UserService
@@ -24,11 +23,6 @@ async def start(message: Message) -> None:
     await message.answer(DM_RESPONSE, reply_markup=inline.commands_help_inline)
 
 
-@router.message(Command("help"))
-async def help_me(message: Message) -> None:
-    await message.answer(HELP_TEXT, reply_markup=inline.back_to_mainpage_inline)
-
-
 @router.my_chat_member(
     ChatMemberUpdatedFilter(member_status_changed=IS_NOT_MEMBER >> IS_MEMBER)
 )
@@ -36,7 +30,11 @@ async def on_bot_added_to_group(event: ChatMemberUpdated) -> None:
     """Handler, когда бота добавляют в общий чат"""
 
     logger.debug(f"Бот добавлен в чат: {event.chat.title} (ID: {event.chat.id})")
-    await event.bot.send_message(chat_id=event.chat.id, text=WELCOME_TEXT)
+    await event.bot.send_message(
+        chat_id=event.chat.id,
+        text=WELCOME_TEXT,
+        reply_markup=inline.commands_help_inline,
+    )
 
 
 @router.message(
@@ -58,7 +56,7 @@ async def on_user_join(message: Message, bot: Bot):
             user_id=new_member.id,
         )
         logger.info(
-            f"👋 Приветствуем нового участника: @{new_member.username} в чате {message.chat.id}"
+            f"Приветствуем нового участника: @{new_member.username} (ID: {new_member.id}, GROUP_ID: {message.chat.id})"
         )
 
 
@@ -79,4 +77,6 @@ async def on_user_leave(message: Message):
         group_id=message.chat.id,
     )
 
-    logger.info(f"👋 Участник покинул чат: @{left_user.username} (ID: {left_user.id})")
+    logger.info(
+        f"Участник покинул чат: @{left_user.username} (ID: {left_user.id}, GROUP_ID: {message.chat.id})"
+    )

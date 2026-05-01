@@ -41,10 +41,10 @@ class UserService:
                 if updated:
                     await session.commit()
                     logger.info(
-                        f"🌰 Бот обновлён: @{bot_user.username} (ID: {bot_user.id})"
+                        f"Данные бота обновлёны: @{bot_user.username} (ID: {bot_user.id})"
                     )
                 else:
-                    logger.info(f"🌰 Бот уже актуален: @{bot_user.username}")
+                    logger.info(f"Данные бота актуальны: @{bot_user.username}")
 
     @staticmethod
     async def get_or_create_user(
@@ -66,7 +66,7 @@ class UserService:
             session.add(user)
             await session.commit()
             await session.refresh(user)
-            logger.info(f"✨ Новый пользователь: @{username} (ID: {telegram_id})")
+            logger.debug(f"Новый пользователь: @{username} (ID: {telegram_id})")
         else:
             updated = False
             if user.username != username:
@@ -78,7 +78,7 @@ class UserService:
             if updated:
                 await session.commit()
                 await session.refresh(user)
-                logger.debug(f"🔄 Обновлён: @{username}")
+                logger.debug(f"Данные пользователя обновлены: @{username}")
 
         return user
 
@@ -130,7 +130,7 @@ class UserService:
                 await session.commit()
                 await session.refresh(membership)
                 logger.info(
-                    f"💍 Создатель @{user.username} автоматически женат на Каштанчике!"
+                    f"Создатель @{user.username} автоматически женат на Каштанчике!"
                 )
 
             # Перезагружаем с user'ом
@@ -140,7 +140,7 @@ class UserService:
                 .options(selectinload(Membership.user))
             )
             membership = result.scalar_one()
-            logger.info(f"📝 Новый membership: @{user.username} в чате {group_id}")
+            logger.info(f"Новый membership: @{user.username} в чате {group_id}")
 
         return membership
 
@@ -224,5 +224,5 @@ class UserService:
             deleted = result.rowcount > 0
             if deleted:
                 logger.info(
-                    f"🗑️ Membership удалён: user_id={user_id}, group_id={group_id}"
+                    f"Membership удалён: user_id={user_id}, group_id={group_id}"
                 )

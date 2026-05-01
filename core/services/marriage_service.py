@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,7 +15,7 @@ class MarriageService:
     @staticmethod
     async def get_membership_by_username(
         session: AsyncSession, group_id: int, target_username: str
-    ) -> Membership | None:
+    ) -> Optional[Membership]:
         """Ищет Membership пользователя по @username в конкретной группе."""
         clean_username = target_username.lstrip("@")
         stmt = (

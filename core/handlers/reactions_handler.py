@@ -4,20 +4,15 @@ from aiogram import Router, types
 from aiogram.enums import ChatType
 
 from core.filters import ChatTypeFilter, VoiceFilter
+from core.keyboards import inline
+from core.messages.general import HELP_TEXT_BY_VOICE_FALLBACK
 from core.messages.reactions import REACTIONS
-from core.messages.keywords import (
-    PROFILE_KEYWORDS,
-    MARRY_KEYWORDS,
-    DIVORCE_KEYWORDS,
-    HUG_KEYWORDS,
-)
+from core.messages.keywords import PROFILE_KEYWORDS, MARRY_KEYWORDS, DIVORCE_KEYWORDS
 
 router = Router()
 
 GROUP_FILTER = ChatTypeFilter(chat_type=[ChatType.GROUP, ChatType.SUPERGROUP])
-ALL_COMMAND_KEYWORDS = (
-    PROFILE_KEYWORDS + MARRY_KEYWORDS + DIVORCE_KEYWORDS + HUG_KEYWORDS
-)
+ALL_COMMAND_KEYWORDS = PROFILE_KEYWORDS + MARRY_KEYWORDS + DIVORCE_KEYWORDS
 
 
 def find_reaction(text: str) -> str | None:
@@ -43,3 +38,7 @@ async def reaction_handler(message: types.Message, query: str):
     reaction = find_reaction(query)
     if reaction:
         await message.reply(reaction)
+    else:
+        await message.reply(
+            HELP_TEXT_BY_VOICE_FALLBACK, reply_markup=inline.commands_help_inline
+        )
